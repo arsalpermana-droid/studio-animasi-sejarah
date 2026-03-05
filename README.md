@@ -332,5 +332,43 @@ Buat naskah Voice Over (VO) atau Dialog (Scene 1 - 10).
             });
         });
     </script>
-</body>
+<script>
+async function generatePrompt() {
+  const judul = document.getElementById("judul").value;
+  const tokoh = document.getElementById("tokoh").value;
+  const tahun = document.getElementById("tahun").value;
+  const konflik = document.getElementById("konflik").value;
+
+  const output = document.getElementById("output");
+
+  output.innerText = "Generating...";
+
+  const apiKey = "PASTE_API_KEY_KAMU_DI_SINI";
+
+  const response = await fetch(
+    "https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key=" + apiKey,
+    {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        contents: [{
+          parts: [{
+            text: `Buatkan cerita animasi sejarah dengan struktur 10 scene lengkap dengan hook 3 detik pertama, dialog konsisten, dan narasi sinematik.
+            
+Judul: ${judul}
+Tokoh: ${tokoh}
+Tahun: ${tahun}
+Konflik: ${konflik}`
+          }]
+        }]
+      }),
+    }
+  );
+
+  const data = await response.json();
+  output.innerText = data.candidates[0].content.parts[0].text;
+}
+</script></body>
 </html>
